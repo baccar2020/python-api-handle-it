@@ -116,7 +116,7 @@ pipeline {
                     
                     // Test de santé basique
                     //sh 'curl http://localhost:3002/ || exit 1'
-                    sh 'curl -kvl http://172.17.0.2:3002/ || exit 1'
+                    sh 'curl -kvl http://172.17.0.1:3002/ || exit 1'
                     
 
                 }
