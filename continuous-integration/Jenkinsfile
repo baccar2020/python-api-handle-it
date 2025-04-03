@@ -37,20 +37,33 @@ pipeline {
 		}
 	    stage('continuous integration') { // Compile and do unit testing
 
-              tools {
-                gradle 'installGradle'
-              }
-              steps {
-                  parallel (
-                  // run Gradle to execute compile and unit testing
-                     pylint: {
-                         sh 'cd continuous-integration && gradle lint'
-                     },
-                     pycode: {
-                         sh 'cd continuous-integration && gradle pycode'
-                     }
-                 )
-              }
+        //      tools {
+        //        gradle 'installGradle'
+        //      }
+        //      steps {
+        //          parallel (
+        //          // run Gradle to execute compile and unit testing
+        //             pylint: {
+        //                 sh 'cd continuous-integration && gradle lint'
+        //             },
+        //             pycode: {
+        //                 sh 'cd continuous-integration && gradle pycode'
+        //             }
+        //         )
+        //      }
+
+        
+            agent {
+                docker {
+                    image 'baccar2023/mypylint'
+                    args '-v ${PWD}:/app'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh 'pylint --recursive yes --exit-zero app'
+            }
+        
             }
 
         stage('testcode') {
